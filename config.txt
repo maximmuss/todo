@@ -1,0 +1,65 @@
+/**
+ * Created by Work on 11.05.2016.
+ */
+'use strict';
+
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const webpack = require('webpack');
+const path = require('path');
+//const merge = require('webpack-merge');
+//const NpmInstallPlugin = require('npm-install-webpack-plugin');
+
+const PATHS = {
+    app: 'D:\Doc\JS\learn_webPack\app',//path.join(__dirname, 'app'),
+    build: 'D:\Doc\JS\learn_webPack\build'//path.join(__dirname, 'build')
+};
+
+const common = {
+    entry: {
+        app: PATHS.app
+    },
+    output: {
+        path: PATHS.build,
+        filename: 'bundle.js'
+    },
+    watch: true,//NODE_ENV == 'development',
+
+    devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map": null,
+
+    plugins: [
+        new webpack.DefinePlugin({
+            NODE_ENV: JSON.stringify(NODE_ENV),
+            LANG:     JSON.stringify('ru')
+        },"react-require")
+    ],
+
+    resolve: {
+        modulesDirectories: ['node_modules'],
+        extension: ['','.js','.jsx']
+    },
+
+    resolveLoader: {
+        modulesDirectories: ['node_modules'],
+        moduleTemplates: ['*-loader'],
+        extension: ['','.js']
+    },
+
+    module: {
+        loaders: [
+            {
+                test: /\.jsx?$/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015']
+                }
+            },
+            {
+                test: /\.css$/,
+                loaders: ['style', 'css'],
+                query: {
+                    presets: ['es2015']
+                }
+            }
+        ]
+    }
+};,
