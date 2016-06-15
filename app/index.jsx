@@ -7,6 +7,8 @@ import App from './components/App.jsx';
 import CommentList from './components/comment-list.jsx';
 import TodoList from './components/TodoList.jsx';
 
+import DataBootstrapGrid from './components/test';
+
 
 
 var TaskStyle = {
@@ -51,11 +53,11 @@ var TodoApp = React.createClass({
                     <input onChange={this.onChange} value={this.state.text} placeholder="Title"/>
 
                     <select name="select" size="1" onChange={this.change}>
-                        <option selected value="Normal" onChange={this.change}>Normal</option>
-                        <option value="Critical" onChange={this.change}>Critical</option>
+                        <option selected value="normal" onChange={this.change}>Normal</option>
+                        <option value="critical" onChange={this.change}>Critical</option>
                     </select>
 
-                    <button>{'Add'}</button>
+                    <button>Add</button>
                 </form>
             </div>
         );
@@ -127,3 +129,8 @@ var CommentBox2 = React.createClass({displayName: 'CommentBox2',
     }
 });
 //ReactDOM.render(React.createElement(CommentBox2, null), document.getElementById('content2'));
+
+
+
+ReactDOM.render(<DataBootstrapGrid />, document.getElementById('table'));
+
