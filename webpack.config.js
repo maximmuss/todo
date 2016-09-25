@@ -1,73 +1,22 @@
-const path = require('path');
-const merge = require('webpack-merge');
-const webpack = require('webpack');
-const NpmInstallPlugin = require('npm-install-webpack-plugin');
-
-const TARGET = process.env.npm_lifecycle_event;
-const PATHS = {
-    app: path.join(__dirname, 'app'),
-    build: path.join(__dirname, 'build')
-};
-
-process.env.BABEL_ENV = TARGET;
-
-const common = {
+module.exports = {
     watch: true,
-
-    entry: [ PATHS.app ],
-
-    resolve: {
-        extensions: ['', '.js', '.jsx']
-    },
+    entry: './src/app.js',
     output: {
-        path: PATHS.build,
+        path: __dirname,
         filename: 'bundle.js'
     },
     module: {
         loaders: [
             {
                 test: /\.css$/,
-                loaders: ['style', 'css'],
-                include: PATHS.app
+                loaders: ['style', 'css']
             },
             {
-                test: /\.jsx?$/,
-                loaders: ['babel?cacheDirectory'],
-                include: PATHS.app,
-                presets:['es2015','react','react']
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel',
+                query: { presets: [ 'es2015', 'react' ] }
             }
         ]
     }
 };
-
-if(TARGET === 'start' || !TARGET) {
-    module.exports = merge(common, {
-        devtool: 'eval-source-map',
-        devServer: {
-            contentBase: PATHS.build,
-
-            historyApiFallback: true,
-            hot: true,
-            inline: true,
-            progress: true,
-
-            // display only errors to reduce the amount of output
-            stats: 'errors-only',
-
-            // parse host and port from env so this is easy
-            // to customize
-            host: process.env.HOST,
-            port: process.env.PORT
-        },
-        plugins: [
-            new webpack.HotModuleReplacementPlugin(),
-            new NpmInstallPlugin({
-                save: true // --save
-            })
-       ]
-    });
-}
-
-//if(TARGET === 'build') {
-//    module.exports = merge(common, {});
-//}
