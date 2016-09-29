@@ -1,8 +1,8 @@
+var NpmInstallPlugin = require('npm-install-webpack-plugin');
 var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-    watch: true,
     devtool: 'cheap-module-eval-source-map',
     entry: [
         'webpack-hot-middleware/client',
@@ -16,20 +16,27 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new NpmInstallPlugin()
     ],
     module: {
+        preLoaders: [
+            {
+                test: /\.js$/,
+                loaders: ['eslint'],
+                include: [
+                    path.resolve(__dirname, "src"),
+                ],
+            }
+        ],
         loaders: [
             {
-                loaders: 'babel-loader',
+                loaders: ['babel-loader'],
                 include: [
                     path.resolve(__dirname, "src"),
                 ],
                 test: /\.js$/,
-                query: {
-                    presets: ['es2015', 'react', 'stage-0'],
-                    plugins: ['transform-runtime', 'react-hot-loader/babel']
-                }
+                plugins: ['transform-runtime'],
             }
         ]
     }
